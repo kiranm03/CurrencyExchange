@@ -1,20 +1,31 @@
+using CurrencyExchange.Application.Commands.CreateQuote;
+using CurrencyExchange.Application.Queries.GetQuote;
 using CurrencyExchange.Contracts.Quotes;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CurrencyExchange.Api.Controllers;
 
 [Route("transfers/[controller]")]
-public class QuotesController : ControllerBase
+public class QuotesController(IMediator mediator) : ControllerBase
 {
     [HttpPost]
-    public IActionResult CreateQuote([FromBody] CreateQuoteRequest request)
+    public async Task<IActionResult> CreateQuote([FromBody] CreateQuoteRequest request)
     {
-        return Ok();
+        var createQuoteCommand = new CreateQuoteCommand(request.SellCurrency, request.BuyCurrency, request.Amount);
+        
+        var quote = await mediator.Send(createQuoteCommand);
+
+        return Ok(quote);
     }
     
     [HttpGet("{quoteId}")]
-    public IActionResult GetQuote(Guid quoteId)
+    public async Task<IActionResult> GetQuote(Guid quoteId)
     {
-        return Ok();
+        var getQuoteQuery = new GetQuoteQuery(quoteId);
+        
+        var quote = await mediator.Send(getQuoteQuery);
+
+        return Ok(quote);
     }
 }

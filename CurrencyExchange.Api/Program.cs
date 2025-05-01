@@ -4,12 +4,13 @@ using CurrencyExchange.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var app = builder.Build();
-
+// Register services before building the app
 builder.Services
     .AddApi()
     .AddApplication()
     .AddInfrastructure();
+
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

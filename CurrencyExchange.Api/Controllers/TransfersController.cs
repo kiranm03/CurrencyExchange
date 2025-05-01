@@ -1,20 +1,33 @@
+using CurrencyExchange.Application.Commands.CreateTransfer;
+using CurrencyExchange.Application.Queries.GetTransfer;
 using CurrencyExchange.Contracts.Transfers;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Payer = CurrencyExchange.Domain.Transfers.Payer;
+using Recipient = CurrencyExchange.Domain.Transfers.Recipient;
 
 namespace CurrencyExchange.Api.Controllers;
 
 [Route("[controller]")]
-public class TransfersController : ControllerBase
+public class TransfersController(IMediator mediator) : ControllerBase
 {
     [HttpPost]
-    public IActionResult CreateTransfer([FromBody] CreateTransferRequest request)
+    public async Task<IActionResult> CreateTransfer([FromBody] CreateTransferRequest request)
     {
-        return Ok();
+        var createTransferCommand = new CreateTransferCommand(request.QuoteId, new Payer(), new Recipient());
+
+        var transfer = await mediator.Send(createTransferCommand);
+
+        return Ok(transfer);
     }
 
     [HttpGet("{transferId}")]
-    public IActionResult GetTransfer(Guid transferId)
+    public async Task<IActionResult> GetTransfer(Guid transferId)
     {
-        return Ok();
+        var getTransferQuery = new GetTransferQuery();
+        
+        var transfer = await mediator.Send(getTransferQuery);
+
+        return Ok(transfer);
     }
 }
