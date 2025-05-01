@@ -1,7 +1,7 @@
 using CurrencyExchange.Domain.Transfers;
-using MediatR;
 using ErrorOr;
+using MediatR;
 
-namespace CurrencyExchange.Application.Queries.GetTransfer;
+namespace CurrencyExchange.Application.Transfers.Queries.GetTransfer;
 
 public record GetTransferQuery : IRequest<ErrorOr<Transfer>>;

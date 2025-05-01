@@ -1,8 +1,8 @@
 using CurrencyExchange.Domain.Quotes;
-using MediatR;
 using ErrorOr;
+using MediatR;
 
-namespace CurrencyExchange.Application.Queries.GetQuote;
+namespace CurrencyExchange.Application.Quotes.Queries.GetQuote;
 
 public class GetQuoteQueryHandler : IRequestHandler<GetQuoteQuery, ErrorOr<Quote>>
 {

@@ -1,4 +1,5 @@
 using CurrencyExchange.Application.Common;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CurrencyExchange.Application;
@@ -12,6 +13,8 @@ public static class DependencyInjection
             options.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly);
             options.AddOpenBehavior(typeof(ValidationBehavior<,>));
         });
+        
+        services.AddValidatorsFromAssemblyContaining(typeof(DependencyInjection));
         
         return services;
     }

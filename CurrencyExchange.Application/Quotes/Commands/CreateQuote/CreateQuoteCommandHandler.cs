@@ -1,8 +1,8 @@
 using CurrencyExchange.Domain.Quotes;
-using MediatR;
 using ErrorOr;
+using MediatR;
 
-namespace CurrencyExchange.Application.Commands.CreateQuote;
+namespace CurrencyExchange.Application.Quotes.Commands.CreateQuote;
 
 public class CreateQuoteCommandHandler : IRequestHandler<CreateQuoteCommand, ErrorOr<Quote>>
 {

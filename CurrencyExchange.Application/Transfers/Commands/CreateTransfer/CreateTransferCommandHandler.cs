@@ -1,8 +1,8 @@
 using CurrencyExchange.Domain.Transfers;
-using MediatR;
 using ErrorOr;
+using MediatR;
 
-namespace CurrencyExchange.Application.Commands.CreateTransfer;
+namespace CurrencyExchange.Application.Transfers.Commands.CreateTransfer;
 
 public class CreateTransferCommandHandler : IRequestHandler<CreateTransferCommand, ErrorOr<Transfer>>
 {

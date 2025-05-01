@@ -1,5 +1,5 @@
-using CurrencyExchange.Application.Commands.CreateTransfer;
-using CurrencyExchange.Application.Queries.GetTransfer;
+using CurrencyExchange.Application.Transfers.Commands.CreateTransfer;
+using CurrencyExchange.Application.Transfers.Queries.GetTransfer;
 using CurrencyExchange.Contracts.Transfers;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

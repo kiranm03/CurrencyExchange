@@ -1,5 +1,5 @@
-using CurrencyExchange.Application.Commands.CreateQuote;
-using CurrencyExchange.Application.Queries.GetQuote;
+using CurrencyExchange.Application.Quotes.Commands.CreateQuote;
+using CurrencyExchange.Application.Quotes.Queries.GetQuote;
 using CurrencyExchange.Contracts.Quotes;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

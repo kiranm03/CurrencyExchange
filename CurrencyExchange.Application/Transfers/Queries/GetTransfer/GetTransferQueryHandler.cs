@@ -1,8 +1,8 @@
 using CurrencyExchange.Domain.Transfers;
-using MediatR;
 using ErrorOr;
+using MediatR;
 
-namespace CurrencyExchange.Application.Queries.GetTransfer;
+namespace CurrencyExchange.Application.Transfers.Queries.GetTransfer;
 
 public class GetTransferQueryHandler : IRequestHandler<GetTransferQuery, ErrorOr<Transfer>>
 {
