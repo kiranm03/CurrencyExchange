@@ -9,6 +9,7 @@ public class Quote : Entity
     public decimal Amount { get; private set; }
     public decimal Rate { get; private set; }
     public decimal InverseRate { get; private set; }
+    public decimal ConvertedAmount { get; private set; }
     public DateTime CreatedAt { get; private set; }
     
     public Quote(Guid? id = null) : base(id ?? Guid.NewGuid())

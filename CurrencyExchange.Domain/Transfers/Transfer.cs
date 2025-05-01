@@ -9,6 +9,7 @@ public class Transfer : Entity
         
     }
     
+    public Guid QuoteId { get; private set; }
     public TransferStatus Status { get; private set; }
     public Payer Payer { get; private set; }
     public Recipient Recipient { get; private set; }
