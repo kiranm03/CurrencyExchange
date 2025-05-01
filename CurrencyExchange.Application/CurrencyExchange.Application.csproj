@@ -13,8 +13,6 @@
     <ItemGroup>
       <Folder Include="Commands\CreateQuote\" />
       <Folder Include="Commands\CreateTransfer\" />
-      <Folder Include="Queries\GetQuote\" />
-      <Folder Include="Queries\GetTransfer\" />
     </ItemGroup>
 
 </Project>
