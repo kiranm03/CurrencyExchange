@@ -11,13 +11,15 @@ public class CreateQuoteCommandValidator : AbstractValidator<CreateQuoteCommand>
             .WithMessage("Amount must be greater than 0");
         
         RuleFor(q=> q.SellCurrency)
-            .NotEmpty()
+            .NotEmpty().WithMessage("SellCurrency must be a 3 letter currency code")
             .Length(3)
             .Matches(@"^[A-Z]{3}$")
-            .WithMessage("SellCurrency must be a 3 letter currency code");
+            .WithMessage("SellCurrency must be a 3 letter currency code")
+            .NotEqual(q => q.BuyCurrency)
+            .WithMessage("SellCurrency and BuyCurrency must be different");
         
         RuleFor(q=> q.BuyCurrency)
-            .NotEmpty()
+            .NotEmpty().WithMessage("BuyCurrency must be a 3 letter currency code")
             .Length(3)
             .Matches(@"^[A-Z]{3}$")
             .WithMessage("BuyCurrency must be a 3 letter currency code")
