@@ -1,8 +1,9 @@
+using CurrencyExchange.Domain.Transfers;
 using MediatR;
 
 namespace CurrencyExchange.Application.Queries.GetTransfer;
 
-public class GetTransferQueryHandler : IRequestHandler<GetTransferQuery, Guid>
+public class GetTransferQueryHandler : IRequestHandler<GetTransferQuery, Transfer>
 {
-    public Task<Guid> Handle(GetTransferQuery request, CancellationToken cancellationToken) => Task.FromResult(Guid.NewGuid());
+    public Task<Transfer> Handle(GetTransferQuery request, CancellationToken cancellationToken) => Task.FromResult(new Transfer());
 }

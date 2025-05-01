@@ -11,8 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Commands\CreateQuote\" />
-      <Folder Include="Commands\CreateTransfer\" />
+      <ProjectReference Include="..\CurrencyExchange.Domain\CurrencyExchange.Domain.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,8 +1,9 @@
+using CurrencyExchange.Domain.Quotes;
 using MediatR;
 
 namespace CurrencyExchange.Application.Queries.GetQuote;
 
-public class GetQuoteQueryHandler : IRequestHandler<GetQuoteQuery, Guid>
+public class GetQuoteQueryHandler : IRequestHandler<GetQuoteQuery, Quote>
 {
-    public Task<Guid> Handle(GetQuoteQuery request, CancellationToken cancellationToken) => Task.FromResult(Guid.NewGuid());
+    public Task<Quote> Handle(GetQuoteQuery request, CancellationToken cancellationToken) => Task.FromResult(new Quote());
 }
