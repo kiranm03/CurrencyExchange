@@ -3,7 +3,7 @@
 GET {{Api_HostAddress}}/health
 Accept: application/json
 
-###
+### Create quote
 POST {{Api_HostAddress}}/transfers/Quotes
 Accept: application/json
 Content-Type: application/json
@@ -20,4 +20,32 @@ Content-Type: application/json
 
 ### Get quote by ID
 GET https://localhost:44329/transfers/Quotes/{{quoteId}}
+Accept: application/json
+
+### Create transfer
+POST https://localhost:44329/transfers
+Accept: application/json
+Content-Type: application/json
+
+{
+  "QuoteId": "{{quoteId}}",
+  "payer": {
+    "id": "c96e4a58-cbf0-4ffb-8ec7-a3adbe4653e6",
+    "name": "John Doe",
+    "transferReason": "Invoice"
+  },
+  "recipient": {
+    "name": "Clint Wood",
+    "accountNumber": "90823482132",
+    "bankCode": "21398",
+    "bankName": "Bank Of America"
+  }
+}
+
+> {%
+    client.global.set("transferId", response.body.transferId);
+%}
+
+### Get transfer by ID
+GET https://localhost:44329/transfers/{{transferId}}
 Accept: application/json
