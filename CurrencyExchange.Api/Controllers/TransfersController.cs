@@ -19,16 +19,17 @@ public class TransfersController(IMediator mediator) : ApiController
     public async Task<IActionResult> CreateTransfer([FromBody] CreateTransferRequest request)
     {
         var payer = DomainPayerType.Create(request.Payer.Id, request.Payer.Name, request.Payer.TransferReason);
-        var recipient = DomainRecipientType.Create(request.Recipient.Name, request.Recipient.AccountNumber, request.Recipient.BankCode, request.Recipient.BankName);
+        var recipient = DomainRecipientType.Create(request.Recipient.Name, request.Recipient.AccountNumber,
+            request.Recipient.BankCode, request.Recipient.BankName);
         var createTransferCommand = new CreateTransferCommand(request.QuoteId, payer, recipient);
 
         var result = await mediator.Send(createTransferCommand);
 
         return result.Match(
             transfer => CreatedAtAction(
-                actionName: nameof(GetTransfer), 
-                routeValues:new { transferId = transfer.Id }, 
-                value:ToDto(transfer)),
+                actionName: nameof(GetTransfer),
+                routeValues: new { transferId = transfer.Id },
+                value: ToDto(transfer)),
             Problem);
     }
 
@@ -36,7 +37,7 @@ public class TransfersController(IMediator mediator) : ApiController
     public async Task<IActionResult> GetTransfer(Guid transferId)
     {
         var getTransferQuery = new GetTransferQuery(transferId);
-        
+
         var result = await mediator.Send(getTransferQuery);
 
         return result.Match(
@@ -45,11 +46,14 @@ public class TransfersController(IMediator mediator) : ApiController
     }
 
     private TransferResponse ToDto(Transfer transfer) =>
-        new(transfer.Id, transfer.Status.ToString(), ToTransferDetailsDto(transfer), transfer.EstimatedDeliveryDate);
+        new(transfer.Id, transfer.Status.ToString(), ToTransferDetailsDto(transfer),
+            transfer.EstimatedDeliveryDate.ToString("yyyy-MM-ddTHH:mm:ss.fffZ"));
 
-    private TransferDetails ToTransferDetailsDto(Transfer transfer) => new(transfer.QuoteId, ToDto(transfer.Payer), ToDto(transfer.Recipient));
+    private TransferDetails ToTransferDetailsDto(Transfer transfer) =>
+        new(transfer.QuoteId, ToDto(transfer.Payer), ToDto(transfer.Recipient));
+
     private ContractsPayerType ToDto(DomainPayerType payer) => new(payer.Id, payer.Name, payer.TransferReason);
-    
-    private ContractsRecipientType ToDto(DomainRecipientType recipient) => 
+
+    private ContractsRecipientType ToDto(DomainRecipientType recipient) =>
         new(recipient.Name, recipient.AccountNumber, recipient.BankCode, recipient.BankName);
 }
