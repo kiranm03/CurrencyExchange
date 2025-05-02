@@ -78,7 +78,7 @@ dotnet user-secrets set "ExternalExchangeRatesApi:AccessKey" "your_real_access_k
 The secret will be stored securely on your local machine and will not be included in source control. You can access this secret in your application using the `IConfiguration` interface.
 
 
-## Patterns Used in the Solution
+## Patterns used in the Solution
 
 The CurrencyExchange API solution follows several design and architectural patterns to ensure scalability, maintainability, and testability. Below are the key patterns used:
 
@@ -115,7 +115,23 @@ The CurrencyExchange API solution follows several design and architectural patte
    - Configuration settings are managed using `appsettings.json` and environment-specific files like `appsettings.Development.json`.
    - Options pattern is used to bind configuration settings to strongly-typed objects.
 
-These patterns collectively ensure that the solution is robust, scalable, and easy to maintain.
+### 11. **Result Pattern**
+   - The solution implements the Result pattern using the `ErrorOr` package.
+   - This pattern is used to encapsulate both successful results and errors in a single return type.
+   - It improves error handling and ensures that all outcomes are explicitly handled.
+   - Example:
+     ```csharp
+     public ErrorOr<Quote> GetQuote(string currencyCode)
+     {
+         if (string.IsNullOrEmpty(currencyCode))
+         {
+             return Error.Validation("CurrencyCode", "Currency code cannot be null or empty.");
+         }
+
+         var quote = _quoteService.GetQuoteByCurrency(currencyCode);
+         return quote ?? Error.NotFound("Quote", "Quote not found.");
+     }
+     ```
 
 ## Testing
 
