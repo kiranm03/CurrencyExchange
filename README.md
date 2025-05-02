@@ -86,52 +86,35 @@ The CurrencyExchange API solution follows several design and architectural patte
    - The solution is organized into layers: API, Application, Domain, Infrastructure, and Contracts.
    - Each layer has a specific responsibility and depends only on the layers below it.
 
-### 2. **Dependency Injection**
-   - All dependencies are injected using the built-in .NET Core Dependency Injection framework.
-   - The `DependencyInjection.cs` files in various projects handle the registration of services.
-
-### 3. **CQRS (Command Query Responsibility Segregation)**
+### 2. **CQRS (Command Query Responsibility Segregation)**
    - The Application layer uses the CQRS pattern to separate read and write operations.
    - Commands are used for write operations (e.g., creating or updating data).
    - Queries are used for read operations (e.g., fetching data).
 
-### 4. **Mediator Pattern**
+### 3. **Mediator Pattern**
    - The MediatR library is used to implement the mediator pattern.
    - All commands and queries are handled by their respective handlers, promoting loose coupling.
 
-### 5. **Validation Pipeline**
-   - A validation behavior is implemented in the Application layer to validate requests before they reach their handlers.
-   - This ensures that invalid requests are caught early in the pipeline.
-
-### 6. **Repository Pattern**
-   - The Infrastructure layer uses the repository pattern to abstract data access logic.
-   - This promotes testability and decouples the domain logic from the data access logic.
-
-### 7. **Decorator Pattern**
-   - Added InMemory caching using decorator pattern to cache results from external provider api.
-   - ICacheService is generic, can be extended to any other future inmemory caching requirements.
-
-### 8. **Configuration Management**
-   - Configuration settings are managed using `appsettings.json` and environment-specific files like `appsettings.Development.json`.
-   - Options pattern is used to bind configuration settings to strongly-typed objects.
-
-### 11. **Result Pattern**
+### 4. **Result Pattern**
    - The solution implements the Result pattern using the `ErrorOr` package.
    - This pattern is used to encapsulate both successful results and errors in a single return type.
    - It improves error handling and ensures that all outcomes are explicitly handled.
-   - Example:
-     ```csharp
-     public ErrorOr<Quote> GetQuote(string currencyCode)
-     {
-         if (string.IsNullOrEmpty(currencyCode))
-         {
-             return Error.Validation("CurrencyCode", "Currency code cannot be null or empty.");
-         }
 
-         var quote = _quoteService.GetQuoteByCurrency(currencyCode);
-         return quote ?? Error.NotFound("Quote", "Quote not found.");
-     }
-     ```
+### 5. **Repository Pattern**
+   - The Infrastructure layer uses the repository pattern to abstract data access logic.
+   - This promotes testability and decouples the domain logic from the data access logic.
+
+### 6. **Decorator Pattern**
+   - Added InMemory caching using decorator pattern to cache results from external provider api.
+   - ICacheService is generic, can be extended to any other future inmemory caching requirements.
+
+### 7. **Dependency Injection**
+   - All dependencies are injected using the built-in .NET Core Dependency Injection framework.
+   - The `DependencyInjection.cs` files in various projects handle the registration of services.
+
+### 8. **Validation Pipeline**
+   - A validation behavior is implemented in the Application layer to validate requests before they reach their handlers.
+   - This ensures that invalid requests are caught early in the pipeline.
 
 ## Testing
 
