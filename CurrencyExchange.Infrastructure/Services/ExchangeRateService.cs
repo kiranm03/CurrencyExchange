@@ -15,11 +15,6 @@ public class ExchangeRateService(IHttpClientFactory httpClientFactory, IOptions<
     {
         try
         {
-            if(sellCurrency.Equals(SellCurrency.AUD) && buyCurrency.Equals(BuyCurrency.USD))
-            {
-                return ExchangeRate.Create(0.768333m);
-            }
-            
             var url = $"?access_key={_options.AccessKey}&base={sellCurrency.ToString()}&symbols={buyCurrency.ToString()}";
             
             var httpClient = httpClientFactory.CreateClient("ExternalExchangeRatesApi");
