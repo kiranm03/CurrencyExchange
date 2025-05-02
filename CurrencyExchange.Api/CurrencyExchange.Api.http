@@ -4,7 +4,7 @@ GET {{Api_HostAddress}}/health
 Accept: application/json
 
 ### Create quote
-POST {{Api_HostAddress}}/transfers/Quotes
+POST {{Api_HostAddress}}/transfers/quote
 Accept: application/json
 Content-Type: application/json
 
@@ -19,7 +19,7 @@ Content-Type: application/json
 %}
 
 ### Get quote by ID
-GET https://localhost:44329/transfers/Quotes/{{quoteId}}
+GET https://localhost:44329/transfers/quote/{{quoteId}}
 Accept: application/json
 
 ### Create transfer

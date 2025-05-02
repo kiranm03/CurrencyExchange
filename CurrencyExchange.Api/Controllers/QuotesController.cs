@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CurrencyExchange.Api.Controllers;
 
-[Route("transfers/[controller]")]
+[Route("transfers/quote")]
 public class QuotesController(IMediator mediator) : ApiController
 {
     [HttpPost]
