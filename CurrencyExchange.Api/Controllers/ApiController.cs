@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace CurrencyExchange.Api.Controllers;
 
-public class ApiController : ControllerBase
+public class ApiController(ILogger<ApiController> logger) : ControllerBase
 {
     protected ActionResult Problem(List<Error> errors)
     {
@@ -16,6 +16,11 @@ public class ApiController : ControllerBase
         if (errors.All(error => error.Type == ErrorType.Validation))
         {
             return ValidationProblem(errors);
+        }
+
+        foreach (var error in errors)
+        {
+            logger.LogError("API error: {Code} - {Description} (Type: {Type})", error.Code, error.Description, error.Type);
         }
 
         return Problem(errors[0]);

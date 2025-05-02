@@ -13,7 +13,7 @@ using ContractsRecipientType = CurrencyExchange.Contracts.Transfers.Recipient;
 namespace CurrencyExchange.Api.Controllers;
 
 [Route("[controller]")]
-public class TransfersController(IMediator mediator) : ApiController
+public class TransfersController(IMediator mediator, ILogger<TransfersController> logger) : ApiController(logger)
 {
     [HttpPost]
     public async Task<IActionResult> CreateTransfer([FromBody] CreateTransferRequest request)

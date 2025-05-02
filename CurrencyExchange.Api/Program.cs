@@ -4,6 +4,9 @@ using CurrencyExchange.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+
 // Register services before building the app
 builder.Services
     .AddApi()

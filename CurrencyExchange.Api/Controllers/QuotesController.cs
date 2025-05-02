@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CurrencyExchange.Api.Controllers;
 
 [Route("transfers/quote")]
-public class QuotesController(IMediator mediator) : ApiController
+public class QuotesController(IMediator mediator, ILogger<QuotesController> logger) : ApiController(logger)
 {
     [HttpPost]
     public async Task<IActionResult> CreateQuote([FromBody] CreateQuoteRequest request)
