@@ -12,6 +12,8 @@ builder.Services
 
 var app = builder.Build();
 
+app.UseRouting();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -21,5 +23,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.MapControllers();
+app.MapHealthChecks("/health");
 
 app.Run();

@@ -1,6 +1,23 @@
-@CurrencyExchange.Api_HostAddress = http://localhost:5159
+@Api_HostAddress = https://localhost:44329
 
-GET {{CurrencyExchange.Api_HostAddress}}/weatherforecast/
+GET {{Api_HostAddress}}/health
 Accept: application/json
 
 ###
+POST {{Api_HostAddress}}/transfers/Quotes
+Accept: application/json
+Content-Type: application/json
+
+{
+    "SellCurrency": "AUD",
+    "BuyCurrency": "USD",
+    "Amount": 1234.50
+}
+
+> {%
+    client.global.set("quoteId", response.body.quoteId);
+%}
+
+### Get quote by ID
+GET https://localhost:44329/transfers/Quotes/{{quoteId}}
+Accept: application/json

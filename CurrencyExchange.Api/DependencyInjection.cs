@@ -7,6 +7,7 @@ public static class DependencyInjection
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
+        services.AddHealthChecks();
         
         return services;
     }

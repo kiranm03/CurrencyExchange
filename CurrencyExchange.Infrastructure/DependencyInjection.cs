@@ -35,8 +35,8 @@ public static class DependencyInjection
                 builder.AddTimeout(TimeSpan.FromSeconds(30));
             });
 
-        services.AddScoped<IQuoteRepository, InMemoryQuoteRepository>();
-        services.AddScoped<ITransferRepository, InMemoryTransferRepository>();
+        services.AddSingleton<IQuoteRepository, InMemoryQuoteRepository>();
+        services.AddSingleton<ITransferRepository, InMemoryTransferRepository>();
         services.AddMemoryCache();
         services.AddSingleton<ExchangeRateService>();
         services.AddSingleton<IExchangeRateService, CachedExchangeRateService>();
