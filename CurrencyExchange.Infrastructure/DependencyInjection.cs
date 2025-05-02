@@ -38,8 +38,15 @@ public static class DependencyInjection
         services.AddSingleton<IQuoteRepository, InMemoryQuoteRepository>();
         services.AddSingleton<ITransferRepository, InMemoryTransferRepository>();
         services.AddMemoryCache();
-        services.AddSingleton<ExchangeRateService>();
-        services.AddSingleton<IExchangeRateService, CachedExchangeRateService>();
+        services.AddSingleton<ICacheService, MemoryCacheService>();
+        services.AddSingleton<IExchangeRateService, CachedExchangeRateService>(provider =>
+        {
+            var exchangeRateService = new ExchangeRateService(
+                provider.GetRequiredService<IHttpClientFactory>(),
+                provider.GetRequiredService<IOptions<ExternalExchangeRatesApiOptions>>());
+            var cacheService = provider.GetRequiredService<ICacheService>();
+            return new CachedExchangeRateService(exchangeRateService, cacheService);
+        });
         services.Configure<ExternalExchangeRatesApiOptions>(
             configuration.GetSection("ExternalExchangeRatesApiOptions"));
 

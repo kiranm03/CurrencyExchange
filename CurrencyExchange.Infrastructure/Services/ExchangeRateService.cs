@@ -7,31 +7,29 @@ using ErrorOr;
 
 namespace CurrencyExchange.Infrastructure.Services;
 
-public class ExchangeRateService(IHttpClientFactory httpClientFactory, IOptions<ExternalExchangeRatesApiOptions> options)
+public class ExchangeRateService(IHttpClientFactory httpClientFactory, IOptions<ExternalExchangeRatesApiOptions> options) : IExchangeRateService
 {
     private readonly ExternalExchangeRatesApiOptions _options = options.Value;
 
-    public async Task<ErrorOr<decimal>> GetExchangeRate(SellCurrency sellCurrency, BuyCurrency buyCurrency,
+    public async Task<ErrorOr<ExchangeRate>> GetExchangeRate(SellCurrency sellCurrency, BuyCurrency buyCurrency,
         CancellationToken cancellationToken = default)
     {
-        var url = $"?access_key={_options.AccessKey}&base={sellCurrency.ToString()}&symbols={buyCurrency.ToString()}";
-
         try
         {
             if(sellCurrency.Equals(SellCurrency.AUD) && buyCurrency.Equals(BuyCurrency.USD))
             {
-                return 0.768333m;
+                return ExchangeRate.Create(0.768333m);
             }
+            
+            var url = $"?access_key={_options.AccessKey}&base={sellCurrency.ToString()}&symbols={buyCurrency.ToString()}";
+            
             var httpClient = httpClientFactory.CreateClient("ExternalExchangeRatesApi");
 
             var response = await httpClient.GetFromJsonAsync<ExchangeRateResponse>(url, cancellationToken);
 
-            if (response?.Rates.TryGetValue(buyCurrency.ToString(), out decimal rate) == true)
-            {
-                return rate;
-            }
-
-            return Error.Failure("ExchangeRateNotFound", "Exchange rate not found for the given currencies.");
+            return response?.Rates.TryGetValue(buyCurrency.ToString(), out decimal rate) == true 
+                ? ExchangeRate.Create(rate) 
+                : Error.Failure("ExchangeRateNotFound", "Exchange rate not found for the given currencies.");
         }
         catch (Exception ex)
         {
@@ -45,26 +43,38 @@ public class ExchangeRateService(IHttpClientFactory httpClientFactory, IOptions<
     }
 }
 
-public class CachedExchangeRateService(ExchangeRateService innerService, IMemoryCache cache) : IExchangeRateService
+public class CachedExchangeRateService(ExchangeRateService exchangeRateService, ICacheService cacheService) : IExchangeRateService
 {
     public async Task<ErrorOr<ExchangeRate>> GetExchangeRate(SellCurrency sellCurrency, BuyCurrency buyCurrency,
         CancellationToken cancellationToken = default)
     {
         var cacheKey = $"{sellCurrency}_{buyCurrency}";
+        
+        return await cacheService.GetOrSetAsync(
+            cacheKey,
+            () => exchangeRateService.GetExchangeRate(sellCurrency, buyCurrency, cancellationToken),
+            TimeSpan.FromMinutes(30));
+    }
+}
 
-        if (cache.TryGetValue(cacheKey, out decimal cachedRate))
+public interface ICacheService
+{
+    Task<T> GetOrSetAsync<T>(string cacheKey, Func<Task<T>> factory, TimeSpan? absoluteExpiration = null);
+}
+
+public class MemoryCacheService(IMemoryCache cache) : ICacheService
+{
+    public async Task<T> GetOrSetAsync<T>(string cacheKey, Func<Task<T>> factory, TimeSpan? absoluteExpiration = null)
+    {
+        if (cache.TryGetValue(cacheKey, out T value))
         {
-            return ExchangeRate.Create(cachedRate);
+            return value;
         }
 
-        var rateResult = await innerService.GetExchangeRate(sellCurrency, buyCurrency, cancellationToken);
+        value = await factory();
 
-        if (rateResult.IsError)
-        {
-            return rateResult.Errors;
-        }
+        cache.Set(cacheKey, value, absoluteExpiration ?? TimeSpan.FromMinutes(30));
 
-        cache.Set(cacheKey, rateResult.Value, TimeSpan.FromMinutes(30));
-        return ExchangeRate.Create(rateResult.Value);
+        return value;
     }
 }
