@@ -37,5 +37,13 @@ public class QuotesController(IMediator mediator, ILogger<QuotesController> logg
             Problem);
     }
     
-    private QuoteResponse ToDto(Quote quote) => new(quote.Id, quote.ExchangeRate.Rate, quote.InverseRate, quote.ConvertedAmount);
+    private QuoteResponse ToDto(Quote quote)
+    {
+        return new QuoteResponse(
+            quote.Id,
+            Math.Round(quote.ExchangeRate.Rate, 6),
+            Math.Round(quote.InverseRate, 5),
+            Math.Round(quote.ConvertedAmount, 2)
+        );
+    }
 }
