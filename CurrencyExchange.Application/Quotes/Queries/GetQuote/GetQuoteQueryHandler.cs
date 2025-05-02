@@ -9,7 +9,7 @@ public class GetQuoteQueryHandler(IQuoteRepository quoteRepository) : IRequestHa
 {
     public async Task<ErrorOr<Quote>> Handle(GetQuoteQuery request, CancellationToken cancellationToken)
     {
-        var quote = await quoteRepository.GetByIdAsync(request.Id, cancellationToken);
+        var quote = await quoteRepository.GetByIdAsync(request.QuoteId, cancellationToken);
         if (quote is null)
         {
             return Error.NotFound("Quote", "Quote not found.");

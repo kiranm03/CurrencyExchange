@@ -35,7 +35,7 @@ public class TransfersController(IMediator mediator) : ApiController
     [HttpGet("{transferId}")]
     public async Task<IActionResult> GetTransfer(Guid transferId)
     {
-        var getTransferQuery = new GetTransferQuery();
+        var getTransferQuery = new GetTransferQuery(transferId);
         
         var result = await mediator.Send(getTransferQuery);
 

@@ -14,7 +14,9 @@ public class CreateTransferCommandValidatorTests
     public void QuoteId_ShouldHaveValationError_WhenNullOrEmpty(Guid quoteId)
     {
         // Arrange
-        var command = new CreateTransferCommand(quoteId, new Payer(), new Recipient());
+        var payer = Payer.Create(Guid.NewGuid(), "Payer Name", "Transfer Reason");
+        var recipient = Recipient.Create("Recipient Name", "Account Number", "Bank Code", "Bank Name");
+        var command = new CreateTransferCommand(quoteId, payer, recipient);
         
         // Act
         var result = _validator.TestValidate(command);
