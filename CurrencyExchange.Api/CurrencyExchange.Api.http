@@ -1,0 +1,51 @@
+@Api_HostAddress = https://localhost:44329
+
+GET {{Api_HostAddress}}/health
+Accept: application/json
+
+### Create quote
+POST {{Api_HostAddress}}/transfers/quote
+Accept: application/json
+Content-Type: application/json
+
+{
+    "SellCurrency": "EUR",
+    "BuyCurrency": "INR",
+    "Amount": 1234.50
+}
+
+> {%
+    client.global.set("quoteId", response.body.quoteId);
+%}
+
+### Get quote by ID
+GET https://localhost:44329/transfers/quote/{{quoteId}}
+Accept: application/json
+
+### Create transfer
+POST https://localhost:44329/transfers
+Accept: application/json
+Content-Type: application/json
+
+{
+  "QuoteId": "{{quoteId}}",
+  "payer": {
+    "id": "c96e4a58-cbf0-4ffb-8ec7-a3adbe4653e6",
+    "name": "John Doe",
+    "transferReason": "Invoice"
+  },
+  "recipient": {
+    "name": "Clint Wood",
+    "accountNumber": "90823482132",
+    "bankCode": "21398",
+    "bankName": "Bank Of America"
+  }
+}
+
+> {%
+    client.global.set("transferId", response.body.transferId);
+%}
+
+### Get transfer by ID
+GET https://localhost:44329/transfers/{{transferId}}
+Accept: application/json
