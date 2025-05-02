@@ -12,14 +12,13 @@ public class Quote : Entity
     public decimal InverseRate { get; private set; }
     public decimal ConvertedAmount { get; private set; }
     public DateTime CreatedAt { get; private set; }
-    
-    public Quote(Guid? id = null) : base(id ?? Guid.NewGuid())
+
+    private Quote(Guid? id = null) : base(id ?? Guid.NewGuid())
     {
     }
 
-    public static ErrorOr<Quote> Create(SellCurrency sellCurrency, BuyCurrency buyCurrency, decimal amount, ExchangeRate exchangeRate)
-    {
-        return new Quote
+    public static Quote Create(SellCurrency sellCurrency, BuyCurrency buyCurrency, decimal amount, ExchangeRate exchangeRate) =>
+        new()
         {
             SellCurrency = sellCurrency,
             BuyCurrency = buyCurrency,
@@ -29,7 +28,6 @@ public class Quote : Entity
             ConvertedAmount = amount * exchangeRate.Rate,
             CreatedAt = DateTime.UtcNow
         };
-    }
 }
 
 public record ExchangeRate(decimal Rate)
@@ -42,7 +40,6 @@ public record ExchangeRate(decimal Rate)
         return new ExchangeRate(rate);
     }
 }
-
 
 public enum SellCurrency
 {

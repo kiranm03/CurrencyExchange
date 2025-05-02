@@ -18,7 +18,9 @@ public class TransfersController(IMediator mediator) : ApiController
     [HttpPost]
     public async Task<IActionResult> CreateTransfer([FromBody] CreateTransferRequest request)
     {
-        var createTransferCommand = new CreateTransferCommand(request.QuoteId, new DomainPayerType(), new DomainRecipientType());
+        var payer = DomainPayerType.Create(request.Payer.Id, request.Payer.Name, request.Payer.TransferReason);
+        var recipient = DomainRecipientType.Create(request.Recipient.Name, request.Recipient.AccountNumber, request.Recipient.BankCode, request.Recipient.BankName);
+        var createTransferCommand = new CreateTransferCommand(request.QuoteId, payer, recipient);
 
         var result = await mediator.Send(createTransferCommand);
 

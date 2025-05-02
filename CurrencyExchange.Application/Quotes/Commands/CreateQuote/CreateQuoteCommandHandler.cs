@@ -26,14 +26,7 @@ public class CreateQuoteCommandHandler(IExchangeRateService exchangeRateService,
             return exchangeRate.Errors;
         }
         
-        var quoteResult = Quote.Create(sellCurrencyEnum, buyCurrencyEnum, request.Amount, exchangeRate.Value);
-        
-        if (quoteResult.IsError)
-        {
-            return quoteResult.Errors;
-        }
-        
-        var quote = quoteResult.Value;
+        var quote = Quote.Create(sellCurrencyEnum, buyCurrencyEnum, request.Amount, exchangeRate.Value);
         
         await quoteRepository.AddAsync(quote, cancellationToken);
         

@@ -37,5 +37,5 @@ public class QuotesController(IMediator mediator) : ApiController
             Problem);
     }
     
-    private QuoteResponse ToDto(Quote quote) => new(quote.Id, quote.ExchangeRate, quote.InverseRate, quote.ConvertedAmount);
+    private QuoteResponse ToDto(Quote quote) => new(quote.Id, quote.ExchangeRate.Rate, quote.InverseRate, quote.ConvertedAmount);
 }
