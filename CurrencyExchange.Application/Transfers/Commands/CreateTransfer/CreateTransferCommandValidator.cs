@@ -9,33 +9,45 @@ public class CreateTransferCommandValidator : AbstractValidator<CreateTransferCo
         RuleFor(t => t.QuoteId)
             .NotEmpty()
             .WithMessage("Quote Id is required");
-        
-        RuleFor(t => t.Payer.Id)
-            .NotEmpty()
-            .WithMessage("Payer Id is required");
 
-        RuleFor(t => t.Payer.Name)
-            .NotEmpty()
-            .WithMessage("Payer name is required");
+        RuleFor(t => t.Payer)
+            .NotNull()
+            .WithMessage("Payer is required")
+            .ChildRules(p =>
+            {
+                p.RuleFor(x => x.Id)
+                    .NotEmpty()
+                    .WithMessage("Payer Id is required");
 
-        RuleFor(t => t.Payer.TransferReason)
-            .NotEmpty()
-            .WithMessage("Payer transfer reason is required");
+                p.RuleFor(x => x.Name)
+                    .NotEmpty()
+                    .WithMessage("Payer name is required");
+
+                p.RuleFor(x => x.TransferReason)
+                    .NotEmpty()
+                    .WithMessage("Payer transfer reason is required");
+            });
         
-        RuleFor(t => t.Recipient.Name)
-            .NotEmpty()
-            .WithMessage("Recipient name is required");
-        
-        RuleFor(t => t.Recipient.AccountNumber)
-            .NotEmpty()
-            .WithMessage("Recipient account number is required");
-        
-        RuleFor(t => t.Recipient.BankCode)
-            .NotEmpty()
-            .WithMessage("Recipient bank code is required");
-        
-        RuleFor(t => t.Recipient.BankName)
-            .NotEmpty()
-            .WithMessage("Recipient bank name is required");
+        RuleFor(t => t.Recipient)
+            .NotNull()
+            .WithMessage("Recipient is required")
+            .ChildRules(r =>
+            {
+                r.RuleFor(x => x.Name)
+                    .NotEmpty()
+                    .WithMessage("Recipient name is required");
+
+                r.RuleFor(x => x.AccountNumber)
+                    .NotEmpty()
+                    .WithMessage("Recipient account number is required");
+
+                r.RuleFor(x => x.BankCode)
+                    .NotEmpty()
+                    .WithMessage("Recipient bank code is required");
+
+                r.RuleFor(x => x.BankName)
+                    .NotEmpty()
+                    .WithMessage("Recipient bank name is required");
+            });
     }
 }
