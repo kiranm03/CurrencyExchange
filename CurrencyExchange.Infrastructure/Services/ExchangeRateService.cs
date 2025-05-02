@@ -7,11 +7,12 @@ using ErrorOr;
 
 namespace CurrencyExchange.Infrastructure.Services;
 
-internal class ExchangeRateService(IHttpClientFactory httpClientFactory, IOptions<ExternalExchangeRatesApiOptions> options) : IExchangeRateService
+public class ExchangeRateService(IHttpClientFactory httpClientFactory, IOptions<ExternalExchangeRatesApiOptions> options)
 {
     private readonly ExternalExchangeRatesApiOptions _options = options.Value;
 
-    public async Task<ErrorOr<decimal>> GetExchangeRate(SellCurrency sellCurrency, BuyCurrency buyCurrency, CancellationToken cancellationToken = default)
+    public async Task<ErrorOr<decimal>> GetExchangeRate(SellCurrency sellCurrency, BuyCurrency buyCurrency,
+        CancellationToken cancellationToken = default)
     {
         var url = $"?access_key={_options.AccessKey}&base={sellCurrency.ToString()}&symbols={buyCurrency.ToString()}";
 
@@ -40,25 +41,26 @@ internal class ExchangeRateService(IHttpClientFactory httpClientFactory, IOption
     }
 }
 
-public class CachedExchangeRateService(IExchangeRateService innerService, IMemoryCache cache) : IExchangeRateService
+public class CachedExchangeRateService(ExchangeRateService innerService, IMemoryCache cache) : IExchangeRateService
 {
-    public async Task<ErrorOr<decimal>> GetExchangeRate(SellCurrency sellCurrency, BuyCurrency buyCurrency, CancellationToken cancellationToken = default)
+    public async Task<ErrorOr<ExchangeRate>> GetExchangeRate(SellCurrency sellCurrency, BuyCurrency buyCurrency,
+        CancellationToken cancellationToken = default)
     {
         var cacheKey = $"{sellCurrency}_{buyCurrency}";
 
         if (cache.TryGetValue(cacheKey, out decimal cachedRate))
         {
-            return cachedRate;
+            return ExchangeRate.Create(cachedRate);
         }
 
         var rateResult = await innerService.GetExchangeRate(sellCurrency, buyCurrency, cancellationToken);
 
         if (rateResult.IsError)
         {
-            return rateResult;
+            return rateResult.Errors;
         }
 
         cache.Set(cacheKey, rateResult.Value, TimeSpan.FromMinutes(30));
-        return rateResult.Value;
+        return ExchangeRate.Create(rateResult.Value);
     }
 }
