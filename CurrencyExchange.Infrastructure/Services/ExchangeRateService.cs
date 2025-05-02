@@ -44,6 +44,6 @@ public class ExchangeRateService(IHttpClientFactory httpClientFactory, IOptions<
 
 public class ExternalExchangeRatesApiOptions
 {
-    public string AccessKey { get; set; } = string.Empty;
-    public string BaseUrl { get; set; } = string.Empty;
+    public string AccessKey { get; init; } = string.Empty;
+    public string BaseUrl { get; init; } = string.Empty;
 }
