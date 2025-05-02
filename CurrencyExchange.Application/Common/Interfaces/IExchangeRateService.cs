@@ -5,5 +5,6 @@ namespace CurrencyExchange.Application.Common.Interfaces;
 
 public interface IExchangeRateService
 {
-    Task<ErrorOr<decimal>> GetExchangeRate(SellCurrency sellCurrency, BuyCurrency buyCurrency);
+    Task<ErrorOr<decimal>> GetExchangeRate(SellCurrency sellCurrency, BuyCurrency buyCurrency,
+        CancellationToken cancellationToken = default);
 }

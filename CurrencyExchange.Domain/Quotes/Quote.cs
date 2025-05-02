@@ -17,9 +17,23 @@ public class Quote : Entity
     {
     }
 
-    public static ErrorOr<Quote> Create(SellCurrency sellCurrency, BuyCurrency buyCurrency, decimal amount, decimal exchangeRate, decimal inverseRate)
+    public static ErrorOr<Quote> Create(SellCurrency sellCurrency, BuyCurrency buyCurrency, decimal amount, decimal exchangeRate)
     {
-        return new Quote();
+        if(exchangeRate <= 0)
+        {
+            return Error.Failure("InvalidExchangeRate", "Exchange rate must be greater than 0.");
+        }
+
+        return new Quote
+        {
+            SellCurrency = sellCurrency,
+            BuyCurrency = buyCurrency,
+            Amount = amount,
+            ExchangeRate = exchangeRate,
+            InverseRate = 1 / exchangeRate,
+            ConvertedAmount = amount * exchangeRate,
+            CreatedAt = DateTime.UtcNow
+        };
     }
 }
 
