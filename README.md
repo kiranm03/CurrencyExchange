@@ -1,7 +1,7 @@
-# CurrencyExchange API
+# Currency Exchange API
 
 ## Overview
-The CurrencyExchange API is a solution designed to handle currency exchange operations, including quotes and transfers. It is built using a modular architecture with separate projects for API, Application, Domain, Infrastructure, and Contracts.
+The Currency Exchange API is a solution designed to handle currency exchange operations, including quotes and transfers. It is built using a modular architecture with separate projects for API, Application, Domain, Infrastructure, and Contracts.
 
 ## Project Structure
 
