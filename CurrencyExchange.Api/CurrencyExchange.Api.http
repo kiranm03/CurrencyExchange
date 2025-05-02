@@ -9,8 +9,8 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "SellCurrency": "AUD",
-    "BuyCurrency": "USD",
+    "SellCurrency": "EUR",
+    "BuyCurrency": "INR",
     "Amount": 1234.50
 }
 
