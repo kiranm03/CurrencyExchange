@@ -14,7 +14,7 @@ public class CreateTransferCommandHandler(IQuoteRepository quoteRepository, ITra
         
         if(quote is null)
         {
-            return Error.NotFound("QuoteId", "Quote not found.");
+            return Error.Validation("QuoteId", "Quote not found.");
         }
         
         var transfer = Transfer.Create(request.QuoteId, request.Payer, request.Recipient);
